@@ -1,4 +1,5 @@
 // var auth = require('./auth');
+// var db = require('../config');
 module.exports = {
     addTo: function (router) {
         router.route('/user')
