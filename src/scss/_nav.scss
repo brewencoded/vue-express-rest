@@ -1,0 +1,36 @@
+nav {
+  background: color(primary1,base);
+  display: block;
+  float: left;
+  width: 300px;
+  position: fixed;
+  height: 100%;
+  & li {
+    float: left;
+    list-style-type: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    &:before{
+      content: "";
+    }
+    &.active{
+      & a{
+        background: color(primary5, base);
+        cursor: pointer;
+      }
+    }
+    & a{
+      padding: 10px;
+      display: block;
+      border: 3px solid rgba(0,0,0,0);
+      color: color(secondary3, base);
+      text-align: center;
+      text-decoration: none;
+      &:hover{
+        background: color(primary5, base);
+        cursor: pointer;
+      }
+    }
+  }
+}

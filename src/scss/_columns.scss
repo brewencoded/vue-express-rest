@@ -1,0 +1,78 @@
+/*----- Columns -----*/
+$columns: 12;
+$media: (
+  xlrg: 1199px,
+  lrg: 991px,
+  md: 767px,
+  sm: 479px,
+  xs: 319px
+);
+
+@mixin col(){
+    @each $size, $width in $media{
+        @for $col from 1 through $columns{
+            .col-#{$size}-#{$col}{
+                width: unquote($col * 100 / $columns +"%");
+                display: block;
+                float: left;
+                padding: 0 10px;
+                box-sizing: border-box;
+                @media only screen and (max-width: #{$width}) {
+                    width: 100%;
+                };
+                &.popup{
+                    @media only screen and (max-width: #{$width}) {
+                            top: 0%;
+                            border-radius: 0px;
+                            height: 100%;
+                            overflow: scroll;
+                            position: fixed;
+                        };
+                }
+                &.half-col-#{$size}{
+                    @media only screen and (max-width: #{$width}) {
+                        width: 50%;
+                        float: left;
+                        padding: 10px;
+                        box-sizing: border-box;
+                    };
+                }
+            }
+            .offset-#{$size}-#{$col}{
+                margin-left: unquote($col * 100 / $columns +"%");
+                @media only screen and (max-width: #{$width}) {
+                    margin-left: 0px;
+                };
+            }
+        }
+        .hide-#{$size}{
+            display: block;
+            @media only screen and (max-width: #{$width}) {
+               display: none;
+            };
+        }
+        .show-#{$size}{
+            display: none;
+            @media only screen and (max-width: #{$width}) {
+               display: inline-block;
+            };
+        }
+    }
+}
+@include col();
+
+.row{
+    width: 100%;
+    float: left;
+    margin: 30px 0;
+}
+
+.well{
+  padding: 10px;
+  background: color(secondary3, light);
+  border: solid 1px color(secondary3, dark);
+  box-sizing: border-box;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px 0;
+}

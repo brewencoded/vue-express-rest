@@ -1,0 +1,56 @@
+@import "_reset.scss";
+@import "_logic.scss";
+@import "_text.scss";
+@import "_columns.scss";
+@import "_buttons.scss";
+@import "_forms.scss";
+@import "_alerts.scss";
+@import "_tables.scss";
+@import "_nav.scss";
+@import "_contacts.scss";
+
+body{
+    //font-family: $font-family;
+    color: #404040;
+    background: #edeef0;
+    @include font(1em ,$font-family, 500);
+}
+
+.full-width{
+    width: 100%;
+    overflow: hidden;
+}
+
+.inner-wrapper{
+    //max-width: $max-width;
+    padding: 30px 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: calc(100% - 300px);
+    margin: 0;
+    float: right;
+}
+
+hr{
+  border-top-color: #e6e8ec;
+  border-bottom-color: #dfe2e7;
+      border-style: solid;
+      border-left: none;
+      border-right: none;
+}
+
+.no-pad{
+  padding: 0;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.pullRight{
+  float: right;
+}
+
+.pullLeft{
+  float: right;
+}

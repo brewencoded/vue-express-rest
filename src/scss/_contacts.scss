@@ -1,0 +1,13 @@
+.importContacts{
+  & .importService{
+    border-bottom: 1px solid color(secondary2, base);
+    padding: 20px 0;
+    & p{
+      margin: 0;
+    }
+  }
+}
+
+.addContacts{
+  border-left: 1px solid color(secondary1, base);
+}

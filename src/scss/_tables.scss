@@ -1,0 +1,32 @@
+.table {
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 10px 0;
+  @include font(.9em, $font-family, 300);
+  & .titleBar {
+    background: color(primary1, base);
+    color: #ffffff;
+    padding: 10px;
+    overflow: hidden;
+  }
+  & .headings {
+    background: color(primary3, base);
+    color: #ffffff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: color(primary6, base) 3px solid;
+  }
+  & .tRows {
+    background: #ffffff;
+    overflow: hidden;
+    width: 100%;
+    & .tRow {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      overflow: hidden;
+      &:nth-child(even) {
+        background: color(secondary1, base);
+      }
+    }
+  }
+}

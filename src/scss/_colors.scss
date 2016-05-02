@@ -1,0 +1,102 @@
+$primary1: #20242d;
+$primary2: #393f47;
+$primary3: #434a54;
+$primary4: #535a64;
+$primary5: #4fc1e9;
+$primary6: #03a4dc;
+$primary7: #112a3e;
+$secondary1: #d8dce3;
+$secondary2: #edeef0;
+$secondary3: #ffffff;
+$secondary4: #1e1e1e;
+$secondary5: #a1a1a1;
+$accent1: #d22222;
+$accent2: #39ab8f;
+$accent3: #297b67;
+
+
+$colors: (
+      // Darker Blue
+      primary1: (
+        base: $primary1,
+        light: lighten($primary1, 15%),
+        dark: darken($primary1, 15%)
+      ),
+      primary2: (
+        base: $primary2,
+        light: lighten($primary2, 15%),
+        dark: darken($primary2, 15%)
+      ),
+      primary3: (
+        base: $primary3,
+        light: lighten($primary3, 15%),
+        dark: darken($primary3, 15%)
+      ),
+      primary4: (
+        base: $primary4,
+        light: lighten($primary4, 15%),
+        dark: darken($primary4, 15%)
+      ),
+      primary5: (
+        base: $primary5,
+        light: lighten($primary5, 15%),
+        dark: darken($primary5, 15%)
+      ),
+      primary6: (
+        base: $primary6,
+        light: lighten($primary6, 15%),
+        dark: darken($primary6, 15%)
+      ),
+      primary7: (
+        base: $primary7,
+        light: lighten($primary7, 15%),
+        dark: darken($primary7, 15%)
+      ),
+      secondary1: (
+        base: $secondary1,
+        light: lighten($secondary1, 15%),
+        dark: darken($secondary1, 15%)
+      ),
+      secondary2: (
+        base: $secondary2,
+        light: lighten($secondary2, 15%),
+        dark: darken($secondary2, 15%)
+      ),
+      secondary3: (
+        base: $secondary3,
+        light: lighten($secondary3, 15%),
+        dark: darken($secondary3, 15%)
+      ),
+      secondary4: (
+        base: $secondary4,
+        light: lighten($secondary4, 15%),
+        dark: darken($secondary4, 15%)
+      ),
+      secondary5: (
+        base: $secondary5,
+        light: lighten($secondary5, 15%),
+        dark: darken($secondary5, 15%)
+      ),
+      accent1: (
+        base: $accent1,
+        light: lighten($accent1, 15%),
+        dark: darken($accent1, 15%)
+      ),
+      accent2: (
+        base: $accent2,
+        light: lighten($accent2, 15%),
+        dark: darken($accent2, 15%)
+      ),
+      accent3: (
+        base: $accent3,
+        light: lighten($accent3, 15%),
+        dark: darken($accent3, 15%)
+      )
+  );
+
+  //---------- FUNCTIONS ------------//
+
+      // color map function
+      @function color($color-name, $color-variant) {
+        @return map-get(map-get($colors, $color-name), $color-variant);
+      }

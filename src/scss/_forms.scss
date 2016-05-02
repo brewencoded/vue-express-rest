@@ -1,0 +1,187 @@
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid color(secondary3, dark);
+  @include font(1em, $font-family, 300);
+  box-sizing: border-box;
+  color: color(secondary5, dark);
+  &[type='text'] {
+    &:disabled {
+      background: #dddddd;
+      color: color(secondary2, dark);
+    }
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.field{
+  margin: 15px 0;
+  position: relative;
+    float: left;
+        width: 100%;
+}
+.error {
+  & input{
+    border-color: color(accent1, base);
+  }
+}
+.success {
+  & input{
+    border-color: color(accent3, base);
+  }
+}
+
+.withButton {
+  & input{
+    width: 80%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    float: left;
+    box-sizing: border-box;
+  }
+  & .button{
+    width: 20%;
+    background: color(primary6,base);
+    box-sizing: border-box;
+    height: 100%;
+    position: absolute;
+    right: 10px;
+    color: color(secondary3, base);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    text-align: center;
+    padding-top: 2.7%;
+    &:hover{
+      background: color(primary6,dark);
+      cursor: pointer;
+    }
+  }
+}
+
+
+
+
+
+label{
+  width: 100%;
+  display: block;
+  @include font(1em, $font-family, 300);
+  margin: 0px 5px ;
+}
+
+
+.checkboxHolder{
+  width: 30px;
+  height: 30px;
+	position: relative;
+  float: left;
+}
+
+.checkbox {
+  cursor: pointer;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 0;
+  border-radius: 4px;
+  border: 2px solid color(secondary1, base);
+  background: #ffffff;
+  box-sizing: border-box;
+  margin: 0;
+  &:after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 5px;
+    background: transparent;
+    top: 7px;
+    left: .25em;
+    border: 3px solid #000000;
+    border-top: none;
+    border-right: none;
+
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+  &:hover::after {
+    opacity: 0.3;
+  }
+  &.checked{
+    background: color(accent2,base);
+    &:after {
+      opacity: 1;
+      border-color: #ffffff;
+    }
+  }
+}
+
+
+
+.toggleSwitch {
+  & .toggleSwitchWrap{
+    width: 100%;
+  	height: 30px;
+  	background: color(accent1, base);
+  	margin: 0px auto;
+  	-webkit-border-radius: 5px;
+  	-moz-border-radius: 5px;
+  	border-radius: 5px;
+  	position: relative;
+    & label {
+    	display: block;
+    	width: 22px;
+    	height: 22px;
+      margin: 0;
+    	-webkit-border-radius: 5px;
+    	-moz-border-radius: 5px;
+    	border-radius: 5px;
+    	-webkit-transition: all .4s ease;
+    	-moz-transition: all .4s ease;
+    	-o-transition: all .4s ease;
+    	-ms-transition: all .4s ease;
+    	transition: all .4s ease;
+    	cursor: pointer;
+    	position: absolute;
+    	top: 4px;
+    	z-index: 1;
+      left: 4px;
+    	background: color(secondary3, base);
+    }
+    &:after {
+      content: "Off";
+      right: 4px;
+      position: absolute;
+      top: 6px;
+      color: color(secondary3,base);
+    }
+  }
+  & input{
+    display: none;
+    &[type=checkbox]:checked + .toggleSwitchWrap {
+    	background: color(accent2, base);
+      & label {
+        left: calc(100% - 26px);
+      }
+      &:after {
+        content: "On";
+        left: 4px;
+        position: absolute;
+        color: color(secondary3,base);
+      }
+    }
+  }
+}
+
+.formRow{
+    width: 100%;
+    float: left;
+    margin: 10px 0;
+}

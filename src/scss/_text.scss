@@ -1,0 +1,118 @@
+// Font Families
+    $font-family: 'Roboto', sans-serif;
+    $secondary-font-family: 'Roboto Condensed', sans-serif;
+
+// Font decloration mixin
+    @mixin font($text-size, $family, $weight){
+        font-size: $text-size;
+        line-height: 1.3;
+        font-family: $family;
+        font-weight:$weight;
+    }
+
+// Text Colors
+    @mixin textColors(){
+            @each $name, $color in $colors{
+                .#{$name}-text{
+                  color: color($name, base);
+                }
+            }
+          }
+     @include textColors();
+
+
+// Basic Text Elements
+h1{
+  @include font(3em ,$secondary-font-family, 300);
+}
+
+h2{
+  @include font(2.25em ,$secondary-font-family, 300);
+}
+
+h3{
+  @include font(1.875em ,$secondary-font-family, 400);
+}
+
+h4{
+  @include font(1.5em ,$font-family, 500);
+}
+
+h5{
+  @include font(1.125em ,$secondary-font-family, 300);
+}
+
+h6{
+  @include font(1em ,$secondary-font-family, 300);
+}
+
+p{
+  @include font(.875em ,$secondary-font-family, 300);
+  margin: 1em 0;
+}
+
+a{
+  @include font(inherit ,$font-family, 300);
+  color: color(primary6, base);
+  text-decoration: underline;
+  &:hover{
+    color: color(primary6, dark);
+  }
+}
+
+span{
+  @include font(inherit ,$font-family, 300);
+}
+
+// Basic Text Styling
+.light{
+  font-weight: 300;
+}
+
+.medium{
+  font-weight: 700;
+}
+
+.bold{
+  font-weight: 900;
+}
+
+.italic{
+  font-style: italic;
+}
+
+.condensed{
+  font-family: $secondary-font-family;
+}
+
+// Extra Text Elements
+ul, ol{
+  margin: 15px 0;
+  @include font(inherit ,$font-family, 300);
+}
+
+ul{
+  & li:before {
+            content: "\2022 ";
+            color: color(primary6, base);
+        }
+}
+
+ol{
+  counter-reset: item;
+  & li:before {
+            content: counter(item) ". ";
+            counter-increment: item;
+            color: color(primary6, base);
+        }
+}
+
+li{
+  padding-left: 20px;
+  margin: 5px 0;
+  list-style-position: inside;
+}
+
+.notProvided{
+  color: #cecece;
+}

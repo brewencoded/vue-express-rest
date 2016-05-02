@@ -1,0 +1,57 @@
+$alerts: (
+  success: 'accent2',
+  error: 'accent1',
+  note: 'primary5',
+  warning: 'secondary5'
+      );
+
+
+
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  background: color(secondary3, base);
+  border: 1px solid color(secondary3, dark);
+  margin: 10px 0;
+  //-webkit-box-shadow: 3px 7px 52px -16px rgba(0,0,0,0.75);
+  //-moz-box-shadow: 3px 7px 52px -16px rgba(0,0,0,0.75);
+  //box-shadow: 3px 7px 52px -16px rgba(0,0,0,0.75);
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  float:left;
+  position: relative;
+  & .close {
+    background: color(secondary4, light);
+    color: #ffffff;
+    border-radius: 5px;
+    margin: 0 auto;
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    right: 20px;
+    &:after {
+          content: "X";
+          vertical-align: middle;
+    }
+    &:hover {
+      background: color(secondary4, base);
+      cursor: pointer;
+    }
+  }
+}
+
+@mixin alertBoxes() {
+        @each $alertName, $alertColor in $alerts{
+          .alert.#{$alertName}{
+            background: color($alertColor, light);
+            border-color: color($alertColor, base);
+            color: darken(color($alertColor, dark), 10%);
+          }
+        }
+      }
+@include alertBoxes();
