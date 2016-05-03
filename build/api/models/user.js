@@ -1,20 +1,28 @@
-module.exports = function (sequelize, name, email, password) {
-    var User = sequelize.define('Article', {
-        name: {
-            type: sequelize.STRING
-        },
-        email: {
-            type: sequelize.STRING
-        },
-        password: {
-            type: sequelize.STRING
-        },
-        created: {
-            type: sequelize.DATE
-        }
-    }, {
-        timestamps: true
-    });
+var Sequelize = require('sequelize');
+var db = require('../config').db;
+var bcrypt = require('bcrypt');
 
-    return User;
-}
+var User = db.define('user', {
+    name: {
+        type: Sequelize.STRING
+    },
+    email: {
+        type: Sequelize.TEXT,
+        primaryKey: true,
+        allowNull: false,
+        validate: {
+            isEmail: true
+        }
+    },
+    password: {
+        type: Sequelize.TEXT
+    }
+}, {
+    timestamps: true
+});
+
+User.hook('afterValidate', function(user) {
+    user.password = bcrypt.hashSync(user.password, 8);
+});
+
+module.exports = User;

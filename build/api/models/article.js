@@ -1,21 +1,29 @@
-var User = require('./user');
+var Sequelize = require('sequelize');
+var db = require('../config').db;
 
-module.exports = function (sequelize, user, title, body) {
-    var Article = sequelize.define('Article', {
-        title: {
-            type: sequelize.STRING
-        },
-        body: {
-            type: sequelize.STRING
-        },
-        created: {
-            type: sequelize.DATE
+var Article = db.define('article', {
+    slug: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    },
+    title: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+            len: {
+                args: [10, 150],
+                msg: 'Title must be between 10 and 150 characters.'
+            }
         }
-    }, {
-        timestamps: true
-    });
+    },
+    body: {
+        type: Sequelize.STRING
+    }
+}, {
+    timestamps: true
+});
 
-    Article.belongsTo(User);
 
-    return Article;
-}
+
+module.exports = Article;

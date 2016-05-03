@@ -1,8 +1,6 @@
 var express = require('express');
-var router = express.Router();
+var router = require('./api/routes/api')(express.Router());
 var bodyParser = require('body-parser');
-var db = require('./api/config').db;
-var routes = require('./api/routes/api');
 var path = require('path');
 var config = require('../config');
 
@@ -24,6 +22,8 @@ var proxyTable = config.dev.proxyTable
 /* end-strip */
 
 var app = express()
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/api/v1', router);
 
 /* start-strip */
 var compiler = webpack(webpackConfig)
@@ -77,18 +77,11 @@ console.log(process.env.NODE_ENV);
 console.log(staticFolder);
 app.use(staticPath, express.static('./static'))
 
-// routing/api
-if (db) {
-}
-
 if (process.env.NODE_ENV === 'release') {
     app.use('*', function(req, res) {
         res.sendFile(path.join(__dirname, '../index.html'));
     });
 }
-app.use(bodyParser.urlencoded({ extended: false }));
-routes.addTo(router);
-app.use('/api/v1', router);
 
 module.exports = app.listen(port, function (err) {
   if (err) {
@@ -96,4 +89,4 @@ module.exports = app.listen(port, function (err) {
     return
   }
   console.log('Listening at http://localhost:' + port + '\n')
-})
+});
