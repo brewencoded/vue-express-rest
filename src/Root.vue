@@ -122,7 +122,7 @@ export default {
     created: function() {
         var component = this;
         // make sure token is still valid and if it is, get user data
-        this.$http.get('/api/v1/users/token', {}, {
+        this.$http.get('/api/v1/token', {}, {
                 headers: {
                     'Authorization': 'Token ' + window.localStorage.webToken
                 }

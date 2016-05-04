@@ -6,13 +6,16 @@ var SECRET = require('../config').SECRET;
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var auth = require('../auth');
+var basicAuth = require('basic-auth');
 
 
 module.exports = function (router) {
     router.route('/user')
         .all(function (request, response, next) {
-            if (request.method === 'delete' || request.method === 'put') {
+            if (request.method === 'DELETE' || request.method === 'PUT' || request.method === 'GET') {
                 auth.validateJWT(request, response, next);
+            } else {
+                next();
             }
         })
         .get(function (request, response) {
@@ -30,30 +33,49 @@ module.exports = function (router) {
             });
         })
         .post(function (request, response) {
-            var name = request.body.name;
-            var email = request.body.email;
-            var password = request.body.password;
-
-            db.sync()
-            .then(function() {
-                return User.create({
-                    name: name,
-                    email: email,
-                    password: password
+            var user = basicAuth(request);
+            if (request.body.name && user && user.pass && user.name) {
+                var name = request.body.name;
+                var email = user.name;
+                var password = user.pass;
+                db.sync()
+                .then(function() {
+                    return User.create({
+                        name: name,
+                        email: email,
+                        password: password
+                    });
+                })
+                .then(function(user) {
+                    jwt.sign({
+                        email: user.email
+                    },
+                    SECRET,
+                    {
+                        expiresIn: '7d' // expires in a week
+                    },
+                    function (err, token) {
+                        if (err) {
+                            response.json({
+                                error: err
+                            });
+                        } else {
+                            response.json({
+                                created: true,
+                                token: token
+                            });
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    response.json(error);
                 });
-            })
-            .then(function(user) {
-                var token = jwt.sign(user.email, SECRET, {
-                    expiresInMinutes: 1440 * 7 // expires in a week
-                });
+            } else {
                 response.json({
-                    created: true,
-                    token: token
+                    success: false,
+                    message: 'All fields are required'
                 });
-            })
-            .catch(function(error) {
-                response.json(error);
-            });
+            }
         })
         .put(function (request, response) {
 
@@ -70,13 +92,6 @@ module.exports = function (router) {
             })
             .catch(function(error) {
                 response.json(error);
-            });
-        });
-
-    router.route('/users/token')
-        .get(function (request, response) {
-            response.json({
-                token: 'some-token'
             });
         });
 
@@ -99,8 +114,10 @@ module.exports = function (router) {
 
     router.route('/article')
         .all(function (request, response, next) {
-            if (request.method === 'delete' || request.method === 'put') {
+            if (request.method === 'DELETE' || request.method === 'PUT') {
                 auth.validateJWT(request, response, next);
+            } else {
+                next();
             }
         })
         .get(function (request, response) {
@@ -137,37 +154,65 @@ module.exports = function (router) {
 
     router.route('/login')
         .post(function (request, response) {
-            var email = request.body.email;
-            var password = request.body.password;
-            User.findOne({
-                where: {
-                    email: email
-                }
-            })
-            .then(function (user) {
-                bcrypt.compare(password, user.password, function (error, isMatch) {
-                    if (error) {
-                        response.json(error);
-                    } else {
-                        if (isMatch) {
-                            var token = jwt.sign(user.email, SECRET, {
-                                expiresInMinutes: 1440 * 7 // expires in a week
-                            });
-                            response.json({
-                                validUser: true,
-                                token: token
-                            });
-                        } else {
-                            response.json({
-                                validUser: false,
-                                message: 'The supplied email and password combination does not match.'
-                            })
-                        }
+            var user = basicAuth(request);
+            if (request.body.name && user && user.pass && user.name) {
+                var email = user.name;
+                var password = user.pass;
+                User.findOne({
+                    where: {
+                        email: email
                     }
+                })
+                .then(function (user) {
+                    bcrypt.compare(password, user.password, function (error, isMatch) {
+                        if (error) {
+                            response.json(error);
+                        } else {
+                            if (isMatch) {
+                                jwt.sign({
+                                    email: user.email
+                                },
+                                SECRET,
+                                {
+                                    expiresIn: '7d' // expires in a week
+                                },
+                                function (err, token) {
+                                    if (err) {
+                                        response.json({
+                                            error: err
+                                        });
+                                    } else {
+                                        response.json({
+                                            created: true,
+                                            token: token
+                                        });
+                                    }
+                                });
+                            } else {
+                                response.json({
+                                    validUser: false,
+                                    message: 'The supplied email and password combination does not match.'
+                                })
+                            }
+                        }
+                    });
+                })
+                .catch(function (error) {
+                    response.json(error);
                 });
-            })
-            .catch(function (error) {
-                response.json(error);
+            } else {
+                response.json({
+                    success: false,
+                    message: 'All fields are required'
+                });
+            }
+        });
+
+    router.route('/token')
+        .all(auth.validateJWT)
+        .get(function (request, response) {
+            response.json({
+                token: request.decoded
             });
         });
 

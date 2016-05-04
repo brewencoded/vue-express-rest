@@ -77,9 +77,9 @@ router.redirect({
 router.beforeEach(function (transition) {
     if (transition.to.auth || transition.to.path === '/') {
         // check if has token
-        if (window.localStorage.webToken) {
+        if (window.localStorage.webToken && window.localStorage.webUser) {
             // make sure token is still valid and if it is, get user data
-            Vue.http.get('/api/v1/user', {
+            Vue.http.get('/api/v1/token', {
                 email: window.localStorage.webUser
             },
             {
@@ -88,7 +88,7 @@ router.beforeEach(function (transition) {
                 }
             })
             .then(function (response) {
-                if (response.data.name) {
+                if (response.data.token) {
                     if (!router.app.storage.userLoggedIn) {
                         router.app.storage.userLoggedIn = true;
                     }

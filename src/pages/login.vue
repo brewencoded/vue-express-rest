@@ -29,7 +29,7 @@
             login: function (e) {
                 e.preventDefault();
                 var component = this;
-                this.$http.get('/api/v1/users/token', {}, {
+                this.$http.get('/api/v1/login', {}, {
                     headers: {
                         'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
                     }
@@ -45,7 +45,7 @@
                         .then(function(response) {
                             if (response.data && response.data.length > 0) {
                                 component.storage.user.articles = response.data;
-                                this.$route.router.go('/profile');
+                                component.$route.router.go('/profile');
                             }
                         },
                         function(error) {

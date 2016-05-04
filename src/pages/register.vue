@@ -31,29 +31,23 @@
                 e.preventDefault();
                 var component = this;
                 this.$http.post('/api/v1/user', {
-                    name: component.name,
-                    email: component.email,
-                    password: component.password
+                    name: component.name
+                },
+                {
+                    headers: {
+                        'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
+                    }
                 })
                 .then(function (response) {
-                    if (response.data.message === 'User created') {
-                        this.$http.get('/api/v1/users/token', {
-                            email: component.email,
-                            password: component.password
-                        })
-                        .then(function(response) {
-                            if (response.data.name) {
-                                window.localStorage.webToken = response.data.token;
-                                window.localStorage.webUser = component.email;
-                                component.error = false;
-                                this.$route.router.go('/profile');
-                            } else {
-                                component.error = true;
-                            }
-                        },
-                        function (error) {
-                            console.log('token retrieval failed', error);
-                        });
+                    if (response.data.created) {
+                        if (response.data.name) {
+                            window.localStorage.webToken = response.data.token;
+                            window.localStorage.webUser = component.email;
+                            component.error = false;
+                            component.$route.router.go('/profile');
+                        } else {
+                            component.error = true;
+                        }
                     } else {
                         console.log('the api may have changed');
                     }
