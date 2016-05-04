@@ -122,25 +122,57 @@ export default {
     created: function() {
         var component = this;
         // make sure token is still valid and if it is, get user data
-        this.$http.get('/api/v1/token', {}, {
+        this.$http.get('/api/v1/token', {
+            email: window.localStorage.webUser
+        }, {
                 headers: {
                     'Authorization': 'Token ' + window.localStorage.webToken
                 }
             })
             .then(function(response) {
+                console.log(response);
                     if (response.data.token) {
                         component.storage.userLoggedIn = true;
                         this.$http.get('/api/v1/articles', {
+                            email: window.localStorage.webUser
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Token ' + window.localStorage.webToken
+                            }
+                        })
+                        .then(function(response) {
+                            console.log(response);
+                            if (response.data && response.data.length > 0) {
+                                component.$set('storage.user.articles', response.data);
+                            }
+                        },
+                        function(error) {
+                            console.log(error);
+                        });
+
+                        this.$http.get('/api/v1/user', {
                                 email: window.localStorage.webUser
+                            },
+                            {
+                                headers: {
+                                    'Authorization': 'Token ' + window.localStorage.webToken
+                                }
                             })
                             .then(function(response) {
-                                    if (response.data && response.data.length > 0) {
-                                        component.$set('storage.user.articles', response.data);
+                                    console.log(response);
+                                    if (response.data.email) {
+                                        component.$set('storage.user.info.name', response.data.name);
+                                        component.$set('storage.user.info.email', response.data.email);
                                     }
                                 },
                                 function(error) {
                                     console.log(error);
                                 });
+                    } else {
+                        delete window.localStorage.webToken;
+                        delete window.localStorage.webUser;
+                        component.$route.router.go('/');
                     }
                 },
                 function(error) {
@@ -153,7 +185,7 @@ export default {
             storage: {
                 user: {
                     info: {
-                        name: 'test testerson'
+                        name: ''
                     },
                     articles: []
                 },

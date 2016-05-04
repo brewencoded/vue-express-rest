@@ -4,10 +4,8 @@ var jwt = require('jsonwebtoken');
 module.exports = {
     validateJWT: function (request, response, next) {
         var authorization = request.headers.authorization;
-        console.log(authorization);
-        if (authorization) {
+        if (authorization && request.query.email) {
             var token = authorization.split(' ')[1];
-            console.log(token);
             jwt.verify(token, SECRET, function (err, decoded) {
                 if (err) {
                     response.json({
@@ -17,7 +15,9 @@ module.exports = {
                     });
                 } else {
                     console.log(request.query.email, decoded.email);
-                    if (request.query.email !== decoded.email) {
+                    console.log(request.path);
+
+                    if (request.query.email.toString().trim() !== decoded.email.toString().trim()) {
                         response.json({
                             success: false,
                             message: 'You do not have access to this user.'

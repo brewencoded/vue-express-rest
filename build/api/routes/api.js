@@ -33,7 +33,10 @@ module.exports = function (router) {
             });
         })
         .post(function (request, response) {
+            console.log(request.body.headers);
+            console.log(request.body.name);
             var user = basicAuth(request);
+            console.log(user);
             if (request.body.name && user && user.pass && user.name) {
                 var name = request.body.name;
                 var email = user.name;
@@ -104,8 +107,8 @@ module.exports = function (router) {
                     email: email
                 }
             })
-            .then(function (user) {
-                response.json(user);
+            .then(function (articles) {
+                response.json(articles);
             })
             .catch(function (error) {
                 response.json(error);
@@ -114,6 +117,7 @@ module.exports = function (router) {
 
     router.route('/article')
         .all(function (request, response, next) {
+            console.log(request.body);
             if (request.method === 'DELETE' || request.method === 'PUT') {
                 auth.validateJWT(request, response, next);
             } else {
@@ -127,33 +131,61 @@ module.exports = function (router) {
             //
         })
         .delete(function (request, response) {
-            //
+            var title = request.body.title;
+            if (title) {
+                db.sync()
+                .then(function () {
+                    Article.destroy({
+                        where: {
+                            title: title
+                        }
+                    })
+                })
+                .then(function (article) {
+                    response.json(article);
+                })
+                .catch(function (error) {
+                    response.json(error);
+                });
+            } else {
+                response.json({
+                    success: false,
+                    message: 'All fields are required'
+                });
+            }
         })
         .post(function (request, response) {
             var title = request.body.title;
             var body = request.body.body;
             var email = request.body.email;
 
-            db.sync()
-            .then(function () {
-                var slug = title.replace(/\s/g, '-');
-                return Article.create({
-                    slug: slug,
-                    title: title,
-                    body: body,
-                    email: email
+            if (title && email && body) {
+                db.sync()
+                .then(function () {
+                    var slug = title.replace(/\s/g, '-');
+                    return Article.create({
+                        slug: slug,
+                        title: title,
+                        body: body,
+                        email: email
+                    });
+                })
+                .then(function (article) {
+                    response.json(article);
+                })
+                .catch(function (error) {
+                    response.json(error);
                 });
-            })
-            .then(function (article) {
-                response.json(article);
-            })
-            .catch(function (error) {
-                response.json(error);
-            });
+            } else {
+                response.json({
+                    success: false,
+                    message: 'All fields are required'
+                });
+            }
         });
 
     router.route('/login')
-        .post(function (request, response) {
+        .get(function (request, response) {
             var user = basicAuth(request);
             if (request.body.name && user && user.pass && user.name) {
                 var email = user.name;
@@ -212,7 +244,7 @@ module.exports = function (router) {
         .all(auth.validateJWT)
         .get(function (request, response) {
             response.json({
-                token: request.decoded
+                token: request.headers.authorization.split(' ')[1]
             });
         });
 

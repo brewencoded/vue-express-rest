@@ -43,7 +43,7 @@ router.map({
             component: Articles,
             auth: true
         },
-        '/article/:id': {
+        '/article/:slug': {
             name: 'article',
             component: Article,
             auth: true
@@ -78,7 +78,7 @@ router.beforeEach(function (transition) {
     if (transition.to.auth || transition.to.path === '/') {
         // check if has token
         if (window.localStorage.webToken && window.localStorage.webUser) {
-            // make sure token is still valid and if it is, get user data
+            // make sure token is still valid
             Vue.http.get('/api/v1/token', {
                 email: window.localStorage.webUser
             },

@@ -3,7 +3,7 @@
 <template>
     <div class="article-list page-wrapper">
         <ul class="article-link">
-            <li v-for="article in storage.user.articles"><a v-link="{name: 'article', params: {id: article.id, test: 't'}}">{{article.title}}</a></li>
+            <li v-for="article in storage.user.articles"><a v-link="{name: 'article', params: {slug: article.slug}}">{{article.title}}</a></li>
         </ul>
         <form @submit="addArticle">
             <input type="text" placeholder="title" v-model="title">
@@ -25,22 +25,25 @@
         methods: {
             addArticle: function (e) {
                 e.preventDefault();
+                console.log('creating');
                 var component = this;
-                this.$http.post('/api/v1/articles', {
-                    email: window.localStorage.webUser,
+                this.$http.post('/api/v1/article', {
+                    email: component.storage.user.info.email || window.localStorage.webUser,
                     title: component.title,
                     body: component.body
                 },
                 {
                     headers: {
-                        'Authorization': 'Token ' + window.localStorage.webToken
-                    }
+                        'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
+                    },
+                    emulateJSON: true
                 })
                 .then(function(response) {
-                    if (response.data.id) {
+                    console.log(response);
+                    if (response.data.email) {
                         component.storage.user.articles.push(
                             {
-                                id: response.data.id,
+                                slug: response.data.slug,
                                 title: response.data.title,
                                 body: response.data.body,
                                 created_at: response.data.created_at

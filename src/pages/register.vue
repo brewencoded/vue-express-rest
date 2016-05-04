@@ -30,26 +30,20 @@
             register: function (e) {
                 e.preventDefault();
                 var component = this;
+                console.log(component.name);
                 this.$http.post('/api/v1/user', {
                     name: component.name
-                },
-                {
-                    headers: {
-                        'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
-                    }
                 })
                 .then(function (response) {
+                    console.log(response);
                     if (response.data.created) {
-                        if (response.data.name) {
-                            window.localStorage.webToken = response.data.token;
-                            window.localStorage.webUser = component.email;
-                            component.error = false;
-                            component.$route.router.go('/profile');
-                        } else {
-                            component.error = true;
-                        }
+                        window.localStorage.webToken = response.data.token;
+                        window.localStorage.webUser = component.email;
+                        component.error = false;
+                        component.$route.router.go('/profile');
                     } else {
-                        console.log('the api may have changed');
+                        component.error = true;
+                        console.log(response);
                     }
                 },
                 function (error) {
