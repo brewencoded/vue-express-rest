@@ -14,9 +14,6 @@ module.exports = {
                         error: err
                     });
                 } else {
-                    console.log(request.query.email, decoded.email);
-                    console.log(request.path);
-
                     if (request.query.email.toString().trim() !== decoded.email.toString().trim()) {
                         response.json({
                             success: false,

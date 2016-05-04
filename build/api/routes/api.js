@@ -33,10 +33,7 @@ module.exports = function (router) {
             });
         })
         .post(function (request, response) {
-            console.log(request.body.headers);
-            console.log(request.body.name);
             var user = basicAuth(request);
-            console.log(user);
             if (request.body.name && user && user.pass && user.name) {
                 var name = request.body.name;
                 var email = user.name;
@@ -117,7 +114,6 @@ module.exports = function (router) {
 
     router.route('/article')
         .all(function (request, response, next) {
-            console.log(request.body);
             if (request.method === 'DELETE' || request.method === 'PUT') {
                 auth.validateJWT(request, response, next);
             } else {
