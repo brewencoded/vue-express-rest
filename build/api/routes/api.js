@@ -33,7 +33,9 @@ module.exports = function (router) {
             });
         })
         .post(function (request, response) {
+            console.log(request.body);
             var user = basicAuth(request);
+            console.log(user);
             if (request.body.name && user && user.pass && user.name) {
                 var name = request.body.name;
                 var email = user.name;
@@ -124,7 +126,32 @@ module.exports = function (router) {
             //
         })
         .put(function (request, response) {
-            //
+            var slug = request.body.slug;
+            var title = request.body.title;
+            var body = request.body.body;
+            if (title && body) {
+                Article.update({
+                    slug: title.replace(/\s/g, '-'),
+                    title: title,
+                    body: body
+                },
+                {
+                    where: {
+                        slug: slug
+                    }
+                })
+                .then(function (article) {
+                    response.json(article);
+                })
+                .catch(function (error) {
+                    response.json(error);
+                });
+            } else {
+                response.json({
+                    success: false,
+                    message: 'All fields are required'
+                });
+            }
         })
         .delete(function (request, response) {
             var title = request.body.title;

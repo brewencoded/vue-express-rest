@@ -1,8 +1,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('sqlite3', null, null, {
-    dialect: 'sqlite'/*,
-    // uncomment this to persist the database to a file instead of in memory
-    storage: './app.db'*/
+    dialect: 'sqlite',
+    storage: './app.db' // persist data to file. default: memory
 });
 module.exports = {
     db: db,

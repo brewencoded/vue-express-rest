@@ -30,9 +30,14 @@
             register: function (e) {
                 e.preventDefault();
                 var component = this;
-                console.log(component.name);
                 this.$http.post('/api/v1/user', {
                     name: component.name
+                },
+                {
+                    headers: {
+                        'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
+                    },
+                    emulateJSON: true
                 })
                 .then(function (response) {
                     console.log(response);

@@ -104,6 +104,23 @@ textarea {
     padding: .5em 1em;
 }
 
+.success {
+    background-color: green;
+    color: white;
+    padding: .5em 1em;
+}
+
+.fade-in-out-transition {
+    transition: all .3s ease;
+    height: 1em;
+}
+
+.fade-in-out-enter,
+.fade-in-out-leave {
+    height: 0;
+    opacity: 0;
+}
+
 </style>
 
 <template>
