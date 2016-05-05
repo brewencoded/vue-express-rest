@@ -189,10 +189,11 @@ export default {
                     } else {
                         delete window.localStorage.webToken;
                         delete window.localStorage.webUser;
-                        component.$route.router.go('/');
                     }
                 },
                 function(error) {
+                    delete window.localStorage.webToken;
+                    delete window.localStorage.webUser;
                     console.log(error);
                     console.log('logged out')
                 });

@@ -34,7 +34,7 @@
                 },
                 {
                     headers: {
-                        'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
+                        'Authorization': 'Token ' + window.localStorage.webToken
                     },
                     emulateJSON: true
                 })
@@ -46,7 +46,9 @@
                                 slug: response.data.slug,
                                 title: response.data.title,
                                 body: response.data.body,
-                                created_at: response.data.created_at
+                                createdAt: response.data.createdAt,
+                                updatedAt: response.data.updatedAt,
+                                email: response.data.email
                             }
                         );
                     component.title = '';

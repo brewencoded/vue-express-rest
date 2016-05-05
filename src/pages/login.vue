@@ -29,22 +29,30 @@
             login: function (e) {
                 e.preventDefault();
                 var component = this;
-                this.$http.get('/api/v1/login', {}, {
+                this.$http.get('/api/v1/login', {},
+                {
                     headers: {
                         'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
                     }
                 })
                 .then(function(response) {
+                    console.log(response);
                     if (response.data.token) {
                         window.localStorage.webToken = response.data.token;
                         window.localStorage.webUser = component.email;
                         component.error = false;
                         this.$http.get('/api/v1/articles', {
                             email: window.localStorage.webUser
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Token ' + window.localStorage.webToken
+                            }
                         })
                         .then(function(response) {
+                            console.log(response);
                             if (response.data && response.data.length > 0) {
-                                component.storage.user.articles = response.data;
+                                component.$set('storage.user.articles', response.data);
                                 component.$route.router.go('/profile');
                             }
                         },

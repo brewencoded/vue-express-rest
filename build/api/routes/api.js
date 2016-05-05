@@ -140,8 +140,15 @@ module.exports = function (router) {
                         slug: slug
                     }
                 })
-                .then(function (article) {
-                    response.json(article);
+                .then(function (affected) {
+                    response.json({
+                        affected: affected,
+                        updates: {
+                            slug: title.replace(/\s/g, '-'),
+                            title: title,
+                            body: body
+                        }
+                    });
                 })
                 .catch(function (error) {
                     response.json(error);
@@ -154,13 +161,13 @@ module.exports = function (router) {
             }
         })
         .delete(function (request, response) {
-            var title = request.body.title;
-            if (title) {
+            var slug = request.body.slug;
+            if (slug) {
                 db.sync()
                 .then(function () {
                     Article.destroy({
                         where: {
-                            title: title
+                            slug: slug
                         }
                     })
                 })
@@ -210,7 +217,7 @@ module.exports = function (router) {
     router.route('/login')
         .get(function (request, response) {
             var user = basicAuth(request);
-            if (request.body.name && user && user.pass && user.name) {
+            if (user && user.pass && user.name) {
                 var email = user.name;
                 var password = user.pass;
                 User.findOne({
