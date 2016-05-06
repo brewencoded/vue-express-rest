@@ -38,6 +38,8 @@
                 .then(function(response) {
                     console.log(response);
                     if (response.data.token) {
+                        component.storage.userLoggedIn = true;
+                        component.$route.router.go('/profile');
                         window.localStorage.webToken = response.data.token;
                         window.localStorage.webUser = component.email;
                         component.error = false;
@@ -53,12 +55,29 @@
                             console.log(response);
                             if (response.data && response.data.length > 0) {
                                 component.$set('storage.user.articles', response.data);
-                                component.$route.router.go('/profile');
                             }
                         },
                         function(error) {
                             console.log(error);
                         });
+                        this.$http.get('/api/v1/user', {
+                            email: window.localStorage.webUser
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Token ' + window.localStorage.webToken
+                            }
+                        })
+                        .then(function(response) {
+                                console.log(response);
+                                if (response.data.email) {
+                                    component.$set('storage.user.info.name', response.data.name);
+                                    component.$set('storage.user.info.email', response.data.email);
+                                }
+                            },
+                            function(error) {
+                                console.log(error);
+                            });
                     } else {
                         component.error = true;
                     }

@@ -2,12 +2,13 @@
 
 <template>
     <div class="article page-wrapper center">
-        <p class="success" v-show="saved" transition="fade-in-out">Saved</p>
+        <p class="success" v-show="saved" transition="fade-in-out">Saving...</p>
         <h1 v-if="!editing">{{article.title}}</h1>
         <p v-if="!editing">{{article.body}}</p>
         <input v-if="editing" type="text" v-model="title">
         <textarea v-if="editing" cols="30" rows="10" v-model="body">{{article.body}}</textarea>
         <p>Created: {{dateCreated}}</p>
+        <p>Edited: {{dateEdited}}</p>
         <button v-if="!editing" @click="editing = !editing" class="edit">Edit</button>
         <button v-if="editing" @click="save" class="done">Done</button>
         <button v-if="!editing" @click="remove" class="delete">Delete</button>
@@ -43,12 +44,19 @@
                 }
                 console.log(this.article.createdAt);
                 return new Date(this.article.createdAt).toUTCString();
+            },
+            dateEdited: function () {
+                if (!this.article) {
+                    return '';
+                }
+                return new Date(this.article.updatedAt).toUTCString();
             }
         },
         methods: {
             save: function () {
                 this.editing = false;
                 var component = this;
+                component.saved = true;
                 this.$http.put('/api/v1/article',
                 {
                     email: component.storage.user.info.email || window.localStorage.webUser,
@@ -64,15 +72,15 @@
                 })
                 .then(function (response) {
                     console.log(response);
-                    component.saved = true;
-                    setTimeout(function() {
-                        component.article.title = response.data.updates.title;
-                        component.article.body = response.data.updates.body;
-                        component.article.slug = response.data.updates.slug;
+                    component.article.title = response.data.updates.title;
+                    component.article.body = response.data.updates.body;
+                    component.article.slug = response.data.updates.slug;
 
-                        component.$route.router.go('/article/' + response.data.updates.slug);
+                    component.$route.router.go('/article/' + response.data.updates.slug);
+
+                    setTimeout(function() {
                         component.saved = false;
-                    }, 2000);
+                    }, 3000);
                 },
                 function (error) {
                     console.log(error);

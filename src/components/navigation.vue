@@ -23,6 +23,7 @@
                 e.preventDefault();
                 this.storage.userLoggedIn = false;
                 this.storage.user.articles = [];
+                this.storage.user.info = {};
                 delete window.localStorage.webToken;
                 delete window.localStorage.webUser;
 

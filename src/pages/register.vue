@@ -45,6 +45,7 @@
                         window.localStorage.webToken = response.data.token;
                         window.localStorage.webUser = component.email;
                         component.error = false;
+                        component.storage.userLoggedIn = true;
                         component.$route.router.go('/profile');
                     } else {
                         component.error = true;
