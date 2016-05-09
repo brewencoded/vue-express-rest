@@ -14,6 +14,10 @@
 1.  from the command line or git gui, clone the repository:
 2.  cd into the directory from command line
 3.  Install dependencies `npm install`
+4.  Manually update sqlite3
+    * `npm install nan@latest`
+    * `rm -rf node_modules/sqlite3/node_modules/nan/`
+    * `npm rebuild sqlite3 --build-from-source`
 
 **WorkFlow**
 
