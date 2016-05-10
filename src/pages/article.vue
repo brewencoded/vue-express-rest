@@ -81,8 +81,8 @@
                     setTimeout(function() {
                         component.saved = false;
                     }, 3000);
-                },
-                function (error) {
+                })
+                .catch(function (error) {
                     console.log(error);
                 });
             },
@@ -102,11 +102,11 @@
                 .then(function (response) {
                     console.log(response);
                     this.storage.user.articles.splice(this.storage.user.articles.indexOf(this.article), 1);
-                },
-                function (error) {
+                    this.$route.router.go('/articles');
+                })
+                .catch(function (error) {
                     console.log(error);
                 });
-                this.$route.router.go('/articles');
             }
         }
     }

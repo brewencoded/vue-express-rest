@@ -41,21 +41,20 @@
                 .then(function(response) {
                     console.log(response);
                     if (response.data.email) {
-                        component.storage.user.articles.push(
-                            {
+                        component.storage.user.articles
+                        .push({
                                 slug: response.data.slug,
                                 title: response.data.title,
                                 body: response.data.body,
                                 createdAt: response.data.createdAt,
                                 updatedAt: response.data.updatedAt,
                                 email: response.data.email
-                            }
-                        );
+                            });
                     component.title = '';
                     component.body = '';
                     }
-                },
-                function (error) {
+                })
+                .catch(function (error) {
                     console.log(error);
                 });
             }

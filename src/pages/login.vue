@@ -26,6 +26,7 @@
             };
         },
         methods: {
+            // Uses Basic Access Authentication to send credentials
             login: function (e) {
                 e.preventDefault();
                 var component = this;
@@ -35,7 +36,7 @@
                         'Authorization': 'Basic ' + window.btoa(component.email + ':' + component.password)
                     }
                 })
-                .then(function(response) {
+                .then(function(response) { // Set recieved in localStorage if valid
                     console.log(response);
                     if (response.data.token) {
                         component.storage.userLoggedIn = true;
@@ -43,46 +44,40 @@
                         window.localStorage.webToken = response.data.token;
                         window.localStorage.webUser = component.email;
                         component.error = false;
-                        this.$http.get('/api/v1/articles', {
+                        return this.$http.get('/api/v1/articles', {
                             email: window.localStorage.webUser
                         },
                         {
                             headers: {
                                 'Authorization': 'Token ' + window.localStorage.webToken
                             }
-                        })
-                        .then(function(response) {
-                            console.log(response);
-                            if (response.data && response.data.length > 0) {
-                                component.$set('storage.user.articles', response.data);
-                            }
-                        },
-                        function(error) {
-                            console.log(error);
                         });
-                        this.$http.get('/api/v1/user', {
-                            email: window.localStorage.webUser
-                        },
-                        {
-                            headers: {
-                                'Authorization': 'Token ' + window.localStorage.webToken
-                            }
-                        })
-                        .then(function(response) {
-                                console.log(response);
-                                if (response.data.email) {
-                                    component.$set('storage.user.info.name', response.data.name);
-                                    component.$set('storage.user.info.email', response.data.email);
-                                }
-                            },
-                            function(error) {
-                                console.log(error);
-                            });
-                    } else {
+                    } else { // show errors if authentication fails
                         component.error = true;
                     }
-                },
-                function (error) {
+                })
+                .then(function(response) {
+                    console.log(response);
+                    if (response.data && response.data.length > 0) { // if there are articles, set them in the global storage
+                        component.$set('storage.user.articles', response.data);
+                    }
+                    return this.$http.get('/api/v1/user', { // get information on logged in user
+                        email: window.localStorage.webUser
+                    },
+                    {
+                        headers: {
+                            'Authorization': 'Token ' + window.localStorage.webToken
+                        }
+                    });
+                })
+                .then(function(response) {
+                    console.log(response);
+                    if (response.data.email) {
+                        component.$set('storage.user.info.name', response.data.name);
+                        component.$set('storage.user.info.email', response.data.email);
+                    }
+                })
+                .catch(function (error) { // catch errors
                     console.log('token retrieval failed', error);
                 });
             }

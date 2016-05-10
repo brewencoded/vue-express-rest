@@ -133,72 +133,68 @@ textarea {
 <script>
 
 var Navigation = require('./components/navigation');
-// var router = require('./main').router;
 
 export default {
     created: function() {
         var component = this;
-        // make sure token is still valid and if it is, get user data
+        // make sure token is still valid
         this.$http.get('/api/v1/token', {
             email: window.localStorage.webUser
         }, {
-                headers: {
-                    'Authorization': 'Token ' + window.localStorage.webToken
+            headers: {
+                'Authorization': 'Token ' + window.localStorage.webToken
+            }
+        })
+        .then(function(response) {
+            console.log(response);
+                if (response.data.token) {
+                    component.storage.userLoggedIn = true;
+                    // return a promise to be caught in a .then block
+                    return this.$http.get('/api/v1/articles', // if still valid get articles
+                    {
+                        email: window.localStorage.webUser
+                    },
+                    {
+                        headers: {
+                            'Authorization': 'Token ' + window.localStorage.webToken
+                        }
+                    });
+                } else {
+                    delete window.localStorage.webToken;
+                    delete window.localStorage.webUser;
                 }
             })
             .then(function(response) {
                 console.log(response);
-                    if (response.data.token) {
-                        component.storage.userLoggedIn = true;
-                        this.$http.get('/api/v1/articles', {
-                            email: window.localStorage.webUser
-                        },
-                        {
-                            headers: {
-                                'Authorization': 'Token ' + window.localStorage.webToken
-                            }
-                        })
-                        .then(function(response) {
-                            console.log(response);
-                            if (response.data && response.data.length > 0) {
-                                component.$set('storage.user.articles', response.data);
-                            }
-                        },
-                        function(error) {
-                            console.log(error);
-                        });
+                if (response.data && response.data.length > 0) {
+                    component.$set('storage.user.articles', response.data); // reactive syntax
 
-                        this.$http.get('/api/v1/user', {
-                                email: window.localStorage.webUser
-                            },
-                            {
-                                headers: {
-                                    'Authorization': 'Token ' + window.localStorage.webToken
-                                }
-                            })
-                            .then(function(response) {
-                                    console.log(response);
-                                    if (response.data.email) {
-                                        component.$set('storage.user.info.name', response.data.name);
-                                        component.$set('storage.user.info.email', response.data.email);
-                                    }
-                                },
-                                function(error) {
-                                    console.log(error);
-                                });
-                    } else {
-                        delete window.localStorage.webToken;
-                        delete window.localStorage.webUser;
-                    }
-                },
-                function(error) {
-                    delete window.localStorage.webToken;
-                    delete window.localStorage.webUser;
-                    console.log(error);
-                    console.log('logged out')
-                });
+                    return this.$http.get('/api/v1/user', // then get user information
+                    {
+                        email: window.localStorage.webUser
+                    },
+                    {
+                        headers: {
+                            'Authorization': 'Token ' + window.localStorage.webToken
+                        }
+                    });
+                }
+            })
+            .then(function(response) {
+                console.log(response);
+                if (response.data.email) {
+                    component.$set('storage.user.info.name', response.data.name);
+                    component.$set('storage.user.info.email', response.data.email);
+                }
+            })
+            .catch(function(error) { // catches any errors in the chain
+                delete window.localStorage.webToken;
+                delete window.localStorage.webUser;
+                console.log(error);
+                console.log('logged out')
+            });
     },
-    data: function() {
+    data: function() { // global storage object accessed and mutated by all components
         return {
             storage: {
                 user: {

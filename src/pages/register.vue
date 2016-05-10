@@ -27,6 +27,7 @@
             };
         },
         methods: {
+            // Uses Basic Access Authentication to send credentials
             register: function (e) {
                 e.preventDefault();
                 var component = this;
@@ -39,7 +40,7 @@
                     },
                     emulateJSON: true
                 })
-                .then(function (response) {
+                .then(function (response) { // now log them in by returning a token for auth
                     console.log(response);
                     if (response.data.created) {
                         window.localStorage.webToken = response.data.token;
@@ -51,8 +52,8 @@
                         component.error = true;
                         console.log(response);
                     }
-                },
-                function (error) {
+                })
+                .catch(function (error) {
                     console.log(error);
                 });
             }
