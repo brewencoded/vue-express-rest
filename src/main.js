@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import Resource from 'vue-resource';
 
 // Vue's
-import Root from './root';
+import Root from './Root';
 import Index from './pages/index';
 import About from './pages/about';
 import Articles from './pages/articles';

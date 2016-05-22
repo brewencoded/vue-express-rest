@@ -15,16 +15,17 @@
 2.  cd into the directory from command line
 3.  Install dependencies `npm install` (Windows/Linux/Unix)
     * **Windows**:
-    * Node-gyp and the additional steps in installation may be required:
-    * https://github.com/nodejs/node-gyp
-    * add python path to "Path" under "system variables", and add "GYP_MSVS_VERSION" as a new environment variable.
+    * install node-gyp globally `npm install -g node-gyp`
+    * follow the additional steps at [this link](https://github.com/nodejs/node-gyp) under the Windows section.
+    * make sure python path is added to "Path" under "system variables"
+    * "GYP_MSVS_VERSION" should be added as a new environment variable (User Variable should work fine)
 4.  Manually update sqlite3 (Linux/Unix)
     * `npm install nan@latest`
-    * `rm -rf node_modules/sqlite3/node_modules/nan/`
+    * `rm -rf node_modules/sqlite3/node_modules/nan`
     * `npm rebuild sqlite3 --build-from-source`
 4. Manually update sqlite3 (Windows)
    * `npm install nan@latest`
-   * `rmdir /S /Q node_modules/sqlite3/node_modules/nan/`
+   * `rmdir /S /Q node_modules/sqlite3/node_modules/nan`
    * `npm rebuild sqlite3 --build-from-source`
 
 **WorkFlow**
